@@ -30,7 +30,7 @@ module.exports.createListings=async (req, res) => {
       })
         .send()
 
-        res.send("done")
+        res.redirect("/listings")
 
     let url = req.file.path;
     let filename = req.file.filename

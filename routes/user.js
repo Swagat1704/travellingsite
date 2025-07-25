@@ -1,24 +1,29 @@
-const express = require("express")
+const express = require('express');
 const router = express.Router();
-const User = require("../models/user.js")
-const wrapAsync = require("../utils/wrapAsync.js");
-const { Passport } = require("passport");
-const {saveRedirectUrl} = require("../middleware.js")
-const userController = require("../controllers/users.js")
-const passport = require("passport");
+const wrapAsync = require('../utils/wrapAsync');
+const passport = require('passport');
+const { saveRedirectUrl } = require('../middleware.js');
+const userController = require('../controllers/users.js');
 
 
-router.route("/signup")
-.get(userController.signUp)
-.post(wrapAsync(userController.renderSignupForm))
+// Sign Up Page Route and Create Route using router.route ↓
+router
+ .route("/signup")
+ .get( userController.renderSignupForm)
+ .post( wrapAsync( userController.signup ));
 
 
-router.route("/login")
-.get(userController.renderLogInForm)
-.post(saveRedirectUrl,passport.authenticate("local" , {failureRedirect: '/login',failureFlash:true}),userController.logIn)
+// Log In Page Route and Post Route using router.route ↓
+router
+ .route("/login")
+ .get( userController.renderLoginForm )
+ .post( saveRedirectUrl, passport.authenticate('local',
+      { failureRedirect: '/login', failureFlash : true} ),  // Authenticate Middleware
+        userController.login
+    );
 
 
+// Log Out Get Route ↓
+router.get("/logout", userController.logout);
 
-
-router.get("/logout",userController.logOut)
 module.exports = router;
